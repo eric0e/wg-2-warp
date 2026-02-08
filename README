@@ -1,0 +1,21 @@
+# Quick Reference
+
+This file has been replaced by README.md. Please refer to README.md for complete documentation.
+
+## Quick Start
+
+```bash
+# Configure WireGuard
+cp wireguard/wg1.conf.example wireguard/wg1.conf
+# Edit wireguard/wg1.conf with your keys
+
+# Build and start
+docker compose build --no-cache
+docker compose up -d
+
+# Check status
+docker compose ps
+docker compose logs 
+```
+
+See README.md for full documentation.

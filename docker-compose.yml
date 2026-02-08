@@ -1,0 +1,59 @@
+services:
+  warp:
+    build:
+      context: .
+      dockerfile: Dockerfile.warp
+    container_name: warp-server
+    restart: unless-stopped
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./warp-data:/var/lib/cloudflare-warp
+    networks:
+      warp-net:
+        ipv4_address: 172.22.0.10
+    healthcheck:
+      test: ["CMD-SHELL", "curl -4 -f -s --max-time 10 icanhazip.com | grep -q '^104' && warp-cli --accept-tos status | grep -q 'Connected'"]
+      interval: 60s
+      timeout: 15s
+      retries: 3
+      start_period: 30s
+
+  wireguard:
+    build:
+      context: .
+      dockerfile: Dockerfile.wireguard
+    container_name: wireguard-server
+    restart: unless-stopped
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+    volumes:
+      - ./wireguard:/etc/wireguard
+    ports:
+      - "51822:51822/udp"
+    networks:
+      warp-net:
+        ipv4_address: 172.22.0.20
+    depends_on:
+      warp:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wg show wg1 | grep -q interface && ping -c 1 -W 2 172.22.0.10 > /dev/null && ip route show table 200 | grep -q 'default via 172.22.0.10'"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  warp-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+

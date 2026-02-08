@@ -1,0 +1,29 @@
+FROM debian:trixie-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    wireguard-tools \
+    iptables \
+    iproute2 \
+    curl \
+    iputils-ping \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create iproute2 directory and rt_tables file
+RUN mkdir -p /etc/iproute2 && \
+    if [ ! -f /etc/iproute2/rt_tables ]; then \
+        echo "255 local" > /etc/iproute2/rt_tables && \
+        echo "254 main" >> /etc/iproute2/rt_tables && \
+        echo "253 default" >> /etc/iproute2/rt_tables && \
+        echo "0 unspec" >> /etc/iproute2/rt_tables; \
+    fi
+
+RUN mkdir -p /etc/wireguard
+
+COPY entrypoint-wireguard.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+

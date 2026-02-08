@@ -1,0 +1,18 @@
+[Interface]
+Address = 10.13.13.1/24
+SaveConfig = false
+ListenPort = 51822
+PrivateKey = <SERVER PRIVATE KEY>
+################################
+# 1st peer
+[Peer]
+PublicKey = <PEER PUBLIC KEY>
+AllowedIPs = 10.13.13.2/32
+PersistentKeepalive = 0
+################################
+# 2nd peer
+[Peer]
+PublicKey = <PEER PUBLIC KEY>
+AllowedIPs = 10.13.13.3/32
+PersistentKeepalive = 0
+

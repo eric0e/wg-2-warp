@@ -1,0 +1,34 @@
+# Persistent data directories
+warp-data/
+wireguard/*.conf
+!wireguard/wg1.conf.example
+
+# Wireguard keys and sensitive data
+*.key
+*.pub
+
+# Docker volumes
+data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Backup files
+*.tar
+*.tar.gz
+*.bak
+
+# Internal documentation (not for publication)
+PREPARATION_SUMMARY.md
+
