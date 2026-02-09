@@ -4,15 +4,16 @@
 
 ## Overview
 
-wg-2-warp combines a WireGuard VPN server with Cloudflare WARP to give your VPN traffic a Cloudflare WARP IP address instead of a standard datacenter IP. This helps avoid the blocks and restrictions that many websites place on VPN traffic from datacenter IPs.
+wg-2-warp combines a WireGuard VPN server with Cloudflare WARP so that your VPN traffic exits through a Cloudflare WARP IP address rather than a typical datacenter IP. This helps you avoid the blocks and restrictions many websites apply to VPN traffic originating from datacenters. It uses the free tier of Cloudflare WARP and automatically retrieves the required registration file, so you don’t need to provide any personal information to activate the WARP client. The only information it learns is your VPN's IP address..
 
 **How it works:**
 
-- Run a WireGuard server on your VPS
-- Route all WireGuard client traffic through Cloudflare WARP
-- Client traffic exits with a WARP IP address (typically 104.x.x.x range)
-- WARP IPs are geographically close to your VPS location
-- Fail-secure design prevents traffic from bypassing WARP
+- A WireGuard server runs on your VPS inside a Docker container
+- A separate Docker container runs the Cloudflare WARP client
+- All traffic from connected WireGuard clients is routed through the WARP container
+- Your traffic exits to the internet with a Cloudflare WARP IP address (commonly in the 104.x.x.x range)
+- WARP IPs are typically geographically close to your VPS location
+- A fail‑secure design ensures traffic cannot bypass WARP, preventing accidental leak
 
 **Use cases:**
 
