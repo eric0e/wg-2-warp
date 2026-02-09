@@ -1,4 +1,4 @@
-#!/bin/bash  
+#!/bin/bash 
 
 echo "Starting dbus..."
 mkdir -p /run/dbus
@@ -45,7 +45,7 @@ echo "Connecting..."
 warp-cli  --accept-tos connect
 sleep 2
 for i in {1..10}; do
-    warp-cli --accept-tos status | grep -q Connected
+    warp-cli --accept-tos status 2>/dev/null | grep -q Connected
     if [ $? -eq 0 ] ; then
        echo "Connected"
        break
@@ -57,7 +57,7 @@ done
 
 sleep 2 
 # Verify Connected
-warp-cli --accept-tos status | grep -q Connected
+warp-cli --accept-tos status 2>/dev/null | grep -q Connected
 if [ $? -eq 0 ] ; then
     echo "Connected - Reconfirmed"
 else
